@@ -1,0 +1,64 @@
+@import "tailwindcss";
+@import "./theme.css";
+
+/* 적용할 폰트 */
+@font-face {
+  font-family: "NanumBarunGothic";
+  src: url("/fonts/NanumBarunGothic.otf") format("otf");
+  font-display: swap;
+}
+
+/* 폰트 유틸리티 클래스 */
+.headline-01 {
+  font-size: var(--text-23);
+  line-height: 32.4px;
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.subheadline-03-bold {
+  font-size: var(--text-18);
+  line-height: 24.3px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.subheadline-03-regular {
+  font-size: var(--text-18);
+  line-height: 24.3px;
+  font-weight: var(--font-weight-regular);
+}
+
+.body-01-bold {
+  font-size: var(--text-15);
+  line-height: 21.75px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.body-01-regular {
+  font-size: var(--text-15);
+  line-height: 21.75px;
+  font-weight: var(--font-weight-regular);
+}
+
+.body-02-bold {
+  font-size: var(--text-12);
+  line-height: 17.4px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.body-02-regular {
+  font-size: var(--text-12);
+  line-height: 17.4px;
+  font-weight: var(--font-weight-regular);
+}
+
+.caption-01-bold {
+  font-size: var(--text-10);
+  line-height: 14.5px;
+  font-weight: var(--font-weight-semibold);
+}
+
+.caption-01-regular {
+  font-size: var(--text-10);
+  line-height: 14.5px;
+  font-weight: var(--font-weight-regular);
+}
