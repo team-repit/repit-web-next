@@ -12,7 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={"antialiased"}>{children}</body>
+      <body className="antialiased mx-auto w-[500px] flex-col items-center justify-center min-h-screen">
+        <div className="flex">{children}</div>
+      </body>
     </html>
   );
 }
