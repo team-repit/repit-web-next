@@ -1,7 +1,8 @@
 "use client";
-import Header from "@/components/home/header";
+import Header from "@/components/common/header";
 import React from "react";
 
+// TODO: 바텀 시트, 캘린더
 export default function Page() {
   return (
     <div className="w-full">

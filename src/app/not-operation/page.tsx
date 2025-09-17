@@ -28,7 +28,7 @@ export default function Page() {
 
       <button
         onClick={() => router.push("/home")}
-        className="px-6 py-3 rounded-2xl bg-primary-400 text-white hover:bg-primary-200 shadow-md cursor-pointer"
+        className="px-6 py-3 rounded-2xl bg-primary-300 text-white hover:bg-primary-200 shadow-md cursor-pointer"
       >
         홈으로 돌아가기 🏠
       </button>
