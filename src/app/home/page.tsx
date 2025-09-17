@@ -51,7 +51,7 @@ export default function Page() {
 
   return (
     <div className="">
-      <Header title="m" />
+      <Header />
       <div className="flex flex-col mt-[55px] gap-[12px]">
         {sections.map((section) => (
           <SectionButton
