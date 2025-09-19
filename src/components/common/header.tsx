@@ -21,7 +21,7 @@ export default function Header({
   const isHome = pathname === "/home";
 
   return (
-    <header className="w-full h-[74px] pt-[30px] grid grid-cols-3 p-5 border-b border-gray-300">
+    <header className="w-full h-[74px] pt-[30px] grid grid-cols-3 p-5 border-b border-gray-300 bg-white">
       <button
         onClick={onLeftButtonClick ?? (() => router.back())}
         className="flex items-center justify-start cursor-pointer"
