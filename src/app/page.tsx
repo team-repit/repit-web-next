@@ -23,7 +23,7 @@ export default function Page() {
   const checkAuthAndRedirect = () => {
     try {
       const accessToken = localStorage.getItem("auth");
-      if (!accessToken) return router.replace("/home"); // 뒤로가기 시 스플래시로 돌아오지 않게 처리 -> 로그인 페이지로 수정
+      if (!accessToken) return router.replace("/login"); // 뒤로가기 시 스플래시로 돌아오지 않게 처리 -> 로그인 페이지로 수정
 
       const parsedAuthData = JSON.parse(accessToken);
       // 예상 데이터 형태: { token: string, expiresAt: number } -> 이게 아니면 그냥 알아서 만료 기간 정하기
@@ -34,9 +34,9 @@ export default function Page() {
       ) {
         return router.replace("/home");
       }
-      return router.replace("/home"); // 로그인 페이지로 수정
+      return router.replace("/login"); // 로그인 페이지로 수정
     } catch {
-      return router.replace("/home"); // 로그인 페이지로 수정
+      return router.replace("/login"); // 로그인 페이지로 수정
     }
   };
 
