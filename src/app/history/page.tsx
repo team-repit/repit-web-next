@@ -8,6 +8,8 @@ import Header from "@/components/common/header";
 import BottomSheets from "@/components/common/bottom-sheets";
 import YearMonthDropdown from "@/components/history/custom-nav";
 import { formatDateLocal } from "@/utils/format-date-local";
+import RecordList from "@/components/history/record-list";
+import { dummyDailyRecords } from "../../../public/dummy-data/dummy-daily-record";
 
 export default function Page() {
   const router = useRouter();
@@ -28,15 +30,32 @@ export default function Page() {
   const [recordedDays, setRecordedDays] = useState<number[]>([]); // 운동 기록이 있는 날짜들
 
   useEffect(() => {
-    // /api/calendar/{year}/{month} 요청해서 가져왔다고 가정
     const dummyResponse = {
       is_success: true,
       code: "CALENDAR_001",
       message: "월별 운동 기록 날짜 조회에 성공했습니다.",
       result: [9, 10, 23],
     };
+
     setRecordedDays(dummyResponse.result);
-  }, [activeStartDate]);
+
+    if (dummyResponse.result.length > 0) {
+      const lastDay = Math.max(...dummyResponse.result);
+      const year = today.getFullYear();
+      const month = today.getMonth();
+
+      const lastDate = new Date(year, month, lastDay);
+
+      // selectedDate도 세팅해서 바텀시트 바로 열리게
+      setSelectedDate(lastDate);
+
+      // URL도 업데이트
+      router.push(`?date=${formatDateLocal(lastDate)}`);
+
+      // 달력 activeStartDate도 맞춰줌
+      setActiveStartDate(lastDate);
+    }
+  }, []);
 
   const handleSelectDate = (date: Date) => {
     setSelectedDate(date);
@@ -118,13 +137,25 @@ export default function Page() {
           router.push("");
         }}
       >
-        <h2 className="subheadline-03-bold mb-4 px-[5px]">
-          {selectedDate &&
-            `${
-              selectedDate.getMonth() + 1
-            }월 ${selectedDate.getDate()}일의 운동 기록`}
-        </h2>
-        <p className="text-gray-600">아직 기록이 없습니다.</p>
+        <div className="flex flex-col h-full">
+          <h2 className="subheadline-03-bold mb-5 px-[5px] shrink-0">
+            {selectedDate &&
+              `${
+                selectedDate.getMonth() + 1
+              }월 ${selectedDate.getDate()}일의 운동 기록`}
+          </h2>
+
+          <div className="flex-1 overflow-y-auto pr-1">
+            {selectedDate && (
+              <RecordList
+                records={
+                  dummyDailyRecords[formatDateLocal(selectedDate)]?.records ||
+                  []
+                }
+              />
+            )}
+          </div>
+        </div>
       </BottomSheets>
     </div>
   );

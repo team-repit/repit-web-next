@@ -56,7 +56,7 @@ export default function BottomSheets({
       )}
     >
       <div
-        className="w-full h-[40vh] bg-white rounded-t-[25px] pt-[37px] px-5 shadow-[4px_-4px_10px_0_rgba(0,0,0,0.05)] animate-slideUp"
+        className="w-full h-[43vh] bg-white rounded-t-[25px] pt-[37px] px-5 pb-2 shadow-[4px_-4px_10px_0_rgba(0,0,0,0.05)] animate-slideUp"
         style={{ transform: `translateY(${dragOffsetY}px)` }}
         // 터치 이벤트 -> 모바일로 웹 접근하는 경우
         onTouchStart={(e) => handleDragStart(e.touches[0].clientY)}
