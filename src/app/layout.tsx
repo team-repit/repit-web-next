@@ -3,6 +3,9 @@ import "/style/globals.css";
 
 export const metadata: Metadata = {
   title: "Re:PiT",
+  icons: {
+    icon: "/assets/logo-favicon.svg",
+  },
 };
 
 export default function RootLayout({

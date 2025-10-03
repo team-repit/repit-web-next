@@ -9,7 +9,11 @@ import BottomSheets from "@/components/common/bottom-sheets";
 import YearMonthDropdown from "@/components/history/custom-nav";
 import { formatDateLocal } from "@/utils/format-date-local";
 import RecordList from "@/components/history/record-list";
-import { dummyDailyRecords } from "../../../public/dummy-data/dummy-daily-record";
+import {
+  getDailyRecords,
+  getMonthlyRecords,
+} from "@/apis/calendar/calendar.api";
+import { RecordItem } from "@/apis/calendar/calendar.type";
 
 export default function Page() {
   const router = useRouter();
@@ -27,39 +31,62 @@ export default function Page() {
     initialDateParam ? new Date(initialDateParam + "T00:00:00") : today
   );
 
-  const [recordedDays, setRecordedDays] = useState<number[]>([]); // 운동 기록이 있는 날짜들
+  const [recordedDays, setRecordedDays] = useState<number[]>([]); // 해당 월의 운동 기록이 있는 날짜들
+  const [dailyRecords, setDailyRecords] = useState<RecordItem[]>([]); // 일별 운동 기록들
 
   useEffect(() => {
-    const dummyResponse = {
-      is_success: true,
-      code: "CALENDAR_001",
-      message: "월별 운동 기록 날짜 조회에 성공했습니다.",
-      result: [9, 10, 23],
-    };
+    async function fetchMonthlyRecords() {
+      try {
+        const year = today.getFullYear();
+        const month = today.getMonth() + 1; // getMonth()는 0부터 시작하니까 +1 필요
 
-    setRecordedDays(dummyResponse.result);
+        const response = await getMonthlyRecords({ year, month });
 
-    if (dummyResponse.result.length > 0) {
-      const lastDay = Math.max(...dummyResponse.result);
-      const year = today.getFullYear();
-      const month = today.getMonth();
+        if (response.isSuccess) {
+          if (response.result && response.result.length > 0) {
+            // 기록 있는 경우
+            setRecordedDays(response.result);
 
-      const lastDate = new Date(year, month, lastDay);
+            const lastDay = Math.max(...response.result);
+            const lastDate = new Date(year, today.getMonth(), lastDay);
 
-      // selectedDate도 세팅해서 바텀시트 바로 열리게
-      setSelectedDate(lastDate);
-
-      // URL도 업데이트
-      router.push(`?date=${formatDateLocal(lastDate)}`);
-
-      // 달력 activeStartDate도 맞춰줌
-      setActiveStartDate(lastDate);
+            setSelectedDate(lastDate);
+            router.push(`?date=${formatDateLocal(lastDate)}`);
+            setActiveStartDate(lastDate);
+          } else {
+            // 기록 없는 경우
+            setRecordedDays([]);
+            setSelectedDate(null);
+          }
+        }
+      } catch (error) {
+        console.error("월별 기록 조회 실패:", error);
+      }
     }
+
+    fetchMonthlyRecords();
   }, []);
 
-  const handleSelectDate = (date: Date) => {
-    setSelectedDate(date);
-    router.push(`?date=${formatDateLocal(date)}`);
+  const handleSelectDate = async (date: Date) => {
+    try {
+      setSelectedDate(date);
+      router.push(`?date=${formatDateLocal(date)}`);
+
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+
+      const response = await getDailyRecords({ year, month, day });
+
+      if (response.isSuccess && response.result) {
+        setDailyRecords(response.result.records);
+      } else {
+        setDailyRecords([]);
+      }
+    } catch (error) {
+      console.error("일별 기록 조회 실패:", error);
+      setDailyRecords([]);
+    }
   };
 
   const getAvailableMonths = () => {
@@ -146,14 +173,7 @@ export default function Page() {
           </h2>
 
           <div className="flex-1 overflow-y-auto pr-1">
-            {selectedDate && (
-              <RecordList
-                records={
-                  dummyDailyRecords[formatDateLocal(selectedDate)]?.records ||
-                  []
-                }
-              />
-            )}
+            {selectedDate && <RecordList records={dailyRecords} />}
           </div>
         </div>
       </BottomSheets>

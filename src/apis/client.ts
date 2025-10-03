@@ -1,8 +1,7 @@
-const SERVER_URL = ""; // env에서 꺼내오기
-
 // props로 전달 받은 url과 쿼리 파라미터 객체를 합쳐 최종 요청 URL을 만들어줌
 function buildUrl(url: string, params?: Record<string, string | number>) {
-  const fullUrl = `${SERVER_URL}${url}`;
+  const fullUrl = `${process.env.NEXT_PUBLIC_SERVER_URL}${url}`;
+  console.log(fullUrl);
   if (!params) return fullUrl;
   const searchParams = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
