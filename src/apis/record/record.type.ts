@@ -4,12 +4,19 @@ import { ApiResponse } from "../common-type";
 export interface RecordDetail {
   record_id: number;
   pose_type: string;
-  recorded_at: string; // ISO Date string
-  duration: string; // "HH:mm:ss"
-  score: number;
+  recorded_at: string;
+  duration: string;
+  score: string;
   video_name: string;
-  deleted_at?: string | null;
-  scoreDetails: string;
+  scoreDetails: {
+    left: { part: string; score: string }[];
+    right: { part: string; score: string }[];
+    good: string;
+    bad: string;
+  };
 }
-// 운동 상세 조회
+// 운동 상세 조회 응답
 export type GetRecordDetailResponse = ApiResponse<RecordDetail>;
+
+// 운동 영상 삭제 응답
+export type DeleteRecordVideoResponse = ApiResponse<null>;
