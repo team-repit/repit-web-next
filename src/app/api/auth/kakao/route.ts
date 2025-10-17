@@ -10,16 +10,39 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    // 카카오 인가 코드 전달
-    const response = await fetch(`${process.env.SERVER_URL}/auth/kakao`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code }),
-    });
 
-    const data = await response.json(); // 인가 코드 전달 후 요청을 그대로 throw
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/auth/login/kakao?code=${code}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
-    return NextResponse.json(data);
+    const data = await response.json();
+
+    console.log(data);
+    if (!response.ok) {
+      return NextResponse.json(data, { status: response.status });
+    }
+
+    const { accessToken } = data.member;
+    const refreshToken = data;
+
+    // refreshToken을 httpOnly 쿠키에 저장
+    const res = NextResponse.json({ accessToken });
+
+    if (refreshToken) {
+      res.cookies.set("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, // 7일
+      });
+    }
+
+    return res;
   } catch (error) {
     console.error(error);
     return NextResponse.json(

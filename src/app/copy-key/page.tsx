@@ -1,5 +1,6 @@
 "use client";
 import AnimatedPageLayout from "@/components/common/animated-page-layout";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
 
 export default function Page() {
   const router = useRouter();
-  const accessToken = "aaa"; // 나중엔 useAuthStore()로 교체!!
+  const accessToken = useAuthStore((state) => state.accessToken);
   const [showCopySuccess, setShowCopySuccess] = useState(false);
 
   useEffect(() => {
