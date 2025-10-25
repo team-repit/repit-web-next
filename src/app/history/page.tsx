@@ -43,7 +43,7 @@ export default function Page() {
         const response = await getMonthlyRecords({ year, month }); // TODO: 서버에 기본 데이터 넣어달라고 요청하기
 
         console.log(response);
-        if (response.isSuccess) {
+        if (response.is_success) {
           if (response.result && response.result.length > 0) {
             // 기록 있는 경우
             setRecordedDays(response.result);
@@ -79,7 +79,7 @@ export default function Page() {
 
       const response = await getDailyRecords({ year, month, day });
 
-      if (response.isSuccess && response.result) {
+      if (response.is_success && response.result) {
         setDailyRecords(response.result.records);
       } else {
         setDailyRecords([]);
@@ -98,7 +98,7 @@ export default function Page() {
         year: current.getFullYear(),
         month: current.getMonth() + 1,
       });
-      current.setMonth(current.getMonth() + 1);
+      current = new Date(current.getFullYear(), current.getMonth() + 1, 1); // 새로운 객체
     }
     return result.reverse();
   };
