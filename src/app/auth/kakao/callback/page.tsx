@@ -22,7 +22,7 @@ export default function Page() {
         });
 
         const data = await res.json();
-
+        console.log(data.accessToken);
         if (data.accessToken) {
           setAccessToken(data.accessToken);
 

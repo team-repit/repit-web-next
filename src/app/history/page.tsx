@@ -42,6 +42,7 @@ export default function Page() {
 
         const response = await getMonthlyRecords({ year, month }); // TODO: 서버에 기본 데이터 넣어달라고 요청하기
 
+        console.log(response);
         if (response.isSuccess) {
           if (response.result && response.result.length > 0) {
             // 기록 있는 경우
