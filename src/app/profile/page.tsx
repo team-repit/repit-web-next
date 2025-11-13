@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 
 export default function Page() {
   const router = useRouter();
-  const user = useUserStore((state) => state.user); // TODO: 로그인 이후 저장된 내 정보 꺼내서 쓰기
+  const user = useUserStore((state) => state.user);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달이 열렸는지
   const [modalType, setModalType] = useState(""); // 모달 메세지 setting

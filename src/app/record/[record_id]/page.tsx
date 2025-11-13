@@ -62,10 +62,10 @@ export default function Page() {
           recordDetail={recordDetail}
         />
         <VideoCard
-          videoUrl={recordDetail.video_name}
+          videoUrl={recordDetail.video_path}
           onDeleteClick={() => setIsModalOpen(true)}
         />
-        <AnalysisCard scoreDetails={recordDetail.scoreDetails} />
+        <AnalysisCard recordDetail={recordDetail} />
 
         <ConfirmModal
           isOpen={isModalOpen}
