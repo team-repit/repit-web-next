@@ -1,5 +1,6 @@
 "use client";
 
+import Spinner from "@/components/common/spinner";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useUserStore } from "@/stores/useUserStore";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -46,5 +47,9 @@ export default function Page() {
     handleLogin();
   }, [code, setAccessToken, router]);
 
-  return <p>카카오 로그인 처리중...</p>;
+  return (
+    <div className="h-screen flex justify-center items-center">
+      <Spinner />
+    </div>
+  );
 }
