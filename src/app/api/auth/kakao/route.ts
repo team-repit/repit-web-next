@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
 
     const member = data.member;
     const refreshToken = data;
-
     const res = NextResponse.json({ member }); // 클라이언트가 받아서 zustand에 저장하도록
 
     // refreshToken을 httpOnly 쿠키에 저장
