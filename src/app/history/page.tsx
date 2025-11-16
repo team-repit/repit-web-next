@@ -40,9 +40,10 @@ export default function Page() {
         const year = today.getFullYear();
         const month = today.getMonth() + 1; // getMonth()는 0부터 시작하니까 +1 필요
 
-        const response = await getMonthlyRecords({ year, month }); // TODO: 서버에 기본 데이터 넣어달라고 요청하기
+        const response = await getMonthlyRecords({ year, month });
 
-        if (response.isSuccess) {
+        console.log(response);
+        if (response.is_success) {
           if (response.result && response.result.length > 0) {
             // 기록 있는 경우
             setRecordedDays(response.result);
@@ -53,6 +54,7 @@ export default function Page() {
             setSelectedDate(lastDate);
             router.push(`?date=${formatDateLocal(lastDate)}`);
             setActiveStartDate(lastDate);
+            handleSelectDate(lastDate);
           } else {
             // 기록 없는 경우
             setRecordedDays([]);
@@ -78,7 +80,7 @@ export default function Page() {
 
       const response = await getDailyRecords({ year, month, day });
 
-      if (response.isSuccess && response.result) {
+      if (response.is_success && response.result) {
         setDailyRecords(response.result.records);
       } else {
         setDailyRecords([]);
@@ -97,7 +99,7 @@ export default function Page() {
         year: current.getFullYear(),
         month: current.getMonth() + 1,
       });
-      current.setMonth(current.getMonth() + 1);
+      current = new Date(current.getFullYear(), current.getMonth() + 1, 1); // 새로운 객체
     }
     return result.reverse();
   };

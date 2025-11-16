@@ -6,15 +6,16 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import Logo from "@/assets/logo-white.svg";
 import LogoText from "@/assets/logo-text-white.svg";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 const SPLASH_DURATION = 2500;
 
 export default function Page() {
   const router = useRouter();
   const [showSplash, setShowSplash] = useState(true);
+  const accessToken = useAuthStore((s) => s.accessToken);
 
   useEffect(() => {
-    // 앱 게이트웨이 로직 — zustand + persist 로직으로 교체 예정
     // SPLASH_DURATION 지나면 스플래시 숨기기
     const timer = setTimeout(() => setShowSplash(false), SPLASH_DURATION);
     return () => clearTimeout(timer);
@@ -22,21 +23,11 @@ export default function Page() {
 
   const checkAuthAndRedirect = () => {
     try {
-      const accessToken = localStorage.getItem("auth");
-      if (!accessToken) return router.replace("/login"); // 뒤로가기 시 스플래시로 돌아오지 않게 처리 -> 로그인 페이지로 수정
-
-      const parsedAuthData = JSON.parse(accessToken);
-      // 예상 데이터 형태: { token: string, expiresAt: number } -> 이게 아니면 그냥 알아서 만료 기간 정하기
-      if (
-        parsedAuthData?.token &&
-        parsedAuthData?.expiresAt &&
-        parsedAuthData.expiresAt > Date.now()
-      ) {
-        return router.replace("/home");
-      }
-      return router.replace("/login"); // 로그인 페이지로 수정
+      if (!accessToken) return router.replace("/login");
+      // 뒤로가기 시 스플래시로 돌아오지 않게 처리, useAuthRefresh() 했는데도 accessToken 없으면 재로그인으로 refresh 재발급
+      else return router.replace("/copy-key");
     } catch {
-      return router.replace("/login"); // 로그인 페이지로 수정
+      return router.replace("/login");
     }
   };
 

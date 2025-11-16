@@ -15,7 +15,7 @@ export default function Page() {
     if (!accessToken) {
       router.replace("/login");
     }
-  }, [accessToken, router]); // TODO: 보안 강화...?
+  }, [accessToken, router]);
 
   const handleCopyKey = () => {
     if (!accessToken) return;

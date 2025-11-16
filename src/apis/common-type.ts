@@ -1,6 +1,6 @@
 // 공통 응답 형식
 export interface BaseSuccessResponse {
-  isSuccess: boolean;
+  is_success: boolean;
   code: string;
   message: string;
 }

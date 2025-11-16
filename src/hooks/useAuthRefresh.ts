@@ -4,11 +4,12 @@ import { useEffect } from "react";
 export const useAuthRefresh = () => {
   const setAccessToken = useAuthStore((s) => s.setAccessToken);
 
+  const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL;
   useEffect(() => {
     const refresh = async () => {
       try {
         // 쿠키에 담긴 refreshToken은 자동으로 요청에 포함됨
-        const res = await fetch("/api/auth/refresh", {
+        const res = await fetch(`${SERVER_URL}/api/auth/refresh`, {
           method: "POST",
           credentials: "include", // 쿠키를 같이 보내기 위해 필요
         });

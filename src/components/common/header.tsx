@@ -2,7 +2,7 @@
 import React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import LogoIcon from "@/assets/logo-black.svg";
+import LogoIcon from "@/assets/logo-text-black.svg";
 
 interface HeaderProps {
   title?: string;

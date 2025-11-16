@@ -2,7 +2,11 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { deleteRecordVideo, getRecordDetail } from "@/apis/record/record.api";
+import {
+  deleteRecordVideo,
+  getRecordDetail,
+  getVideoS3Url,
+} from "@/apis/record/record.api";
 import ConfirmModal from "@/components/common/confirm-modal";
 import Header from "@/components/common/header";
 import AnalysisCard from "@/components/record-detail/analysis-card";
@@ -16,6 +20,7 @@ export default function Page() {
 
   const [recordDetail, setRecordDetail] = useState<RecordDetail | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string>("");
 
   const handleConfirmDelete = async () => {
     try {
@@ -38,8 +43,19 @@ export default function Page() {
       }
     };
 
+    const fetchVideoUrl = async () => {
+      try {
+        const response = await getVideoS3Url(Number(record_id));
+        console.log("Video URL:", response);
+        setVideoUrl(response.result?.url || "");
+      } catch (error) {
+        console.error("영상 URL 불러오기 실패:", error);
+      }
+    };
+
     if (record_id) {
       fetchRecordDetail();
+      fetchVideoUrl();
     }
   }, [record_id]);
 
@@ -62,10 +78,10 @@ export default function Page() {
           recordDetail={recordDetail}
         />
         <VideoCard
-          videoUrl={recordDetail.video_name}
+          videoUrl={videoUrl}
           onDeleteClick={() => setIsModalOpen(true)}
         />
-        <AnalysisCard scoreDetails={recordDetail.scoreDetails} />
+        <AnalysisCard recordDetail={recordDetail} />
 
         <ConfirmModal
           isOpen={isModalOpen}

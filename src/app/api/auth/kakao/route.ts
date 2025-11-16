@@ -26,19 +26,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(data, { status: response.status });
     }
 
-    const { accessToken } = data.member;
+    const member = data.member;
     const refreshToken = data;
+    const res = NextResponse.json({ member }); // 클라이언트가 받아서 zustand에 저장하도록
 
     // refreshToken을 httpOnly 쿠키에 저장
-    const res = NextResponse.json({ accessToken });
-
     if (refreshToken) {
       res.cookies.set("refreshToken", refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
         path: "/",
-        maxAge: 60 * 60 * 24 * 7, // 7일
+        maxAge: 60 * 60 * 24 * 7, // 7일 -> 7일 지나면 재로그인 필요
       });
     }
 
