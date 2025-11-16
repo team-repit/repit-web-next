@@ -1,0 +1,116 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "./font.css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+  }
+} */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "NanumBarunGothic";
+}
+
+/* history 달력 */
+.react-calendar {
+  @apply w-full pt-[30px] p-5;
+}
+
+/* 모든 날짜 타일은 flex 중앙 정렬 */
+.react-calendar__tile {
+  @apply flex h-10 items-center justify-center cursor-pointer;
+}
+
+/* 선택된 날짜 안쪽에 span으로 원 만들기 */
+.react-calendar__tile--active abbr {
+  @apply flex items-center justify-center w-[30px] h-[30px] rounded-full bg-primary-500 text-white;
+}
+
+.react-calendar__month-view__days {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 13px 30px; /* 날짜 칸 간격 */
+  display: flex;
+  color: #979ead;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.react-calendar__month-view__weekdays abbr {
+  text-decoration: none; /* 밑줄 제거 */
+  border-bottom: none; /* 혹시 테마에 border 있으면 제거 */
+}
+
+/* 요일 부분도 grid */
+.react-calendar__month-view__weekdays {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 30px; /* 요일 간격 */
+  color: #979ead;
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  cursor: default;
+}
+
+/* 기록 있는 날짜 (기본) */
+.has-record {
+  position: relative;
+  color: #046b51; /* 글자 강조 */
+  font-weight: 600;
+}
+
+/* 점 찍기 */
+.has-record::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  background-color: #046b51;
+  border-radius: 50%;
+}
+
+/* 선택된 날짜는 점 제거 */
+.selected-record::after {
+  display: none;
+}
+
+/* disabled 날짜 스타일 */
+.react-calendar__tile:disabled {
+  background-color: transparent;
+  color: #ccc;
+  cursor: default;
+}
+
+/* bottom-sheets */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
+}
