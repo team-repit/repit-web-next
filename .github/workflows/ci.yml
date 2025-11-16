@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build:
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Yarn 설치
+      - name: Install Yarn v1
+        run: npm install -g yarn@1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: "yarn"
+
+      # node_modules 설치
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # Vite 빌드
+      - name: Build project with Vite
+        id: build
+        run: yarn build
+        continue-on-error: true
+
+      # 빌드 결과 판단
+      - name: Evaluate build status
+        id: status
+        run: |
+          result="failed"
+          message="빌드 실패 ⛔️"
+          if [ "${{ steps.build.outcome }}" == "success" ]; then
+            result="success"
+            message="빌드 성공 🥳"
+          fi
+          echo "result=$result" >> $GITHUB_OUTPUT
+          echo "message=$message" >> $GITHUB_OUTPUT
+
+      # Pull Request에 코멘트 남기기
+      - name: Add comment to PR with build status
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const message = `${{ steps.status.outputs.message }}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body: `### 빌드 결과\n${message}`
+            });
+
+      # 실패 시 CI 실패 처리
+      - name: Fail job if build failed
+        if: steps.build.outcome == 'failure'
+        run: exit 1
