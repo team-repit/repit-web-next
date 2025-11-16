@@ -22,7 +22,7 @@ export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
       link.href = blobUrl;
 
       // 파일명 추출 (URL에서) 또는 기본 파일명 사용
-      const fileName = videoUrl.split("/").pop() || "video.mp4";
+      const fileName = videoUrl.split("/").pop()?.split("?")[0] || "video.mp4";
       link.download = fileName;
 
       // 다운로드 트리거
