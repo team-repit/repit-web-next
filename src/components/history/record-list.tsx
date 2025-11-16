@@ -1,15 +1,11 @@
 "use client";
 
+import { RecordItem } from "@/apis/calendar/calendar.type";
 import { useRouter } from "next/navigation";
 
 interface RecordListProps {
-  records: {
-    recordId: number;
-    exercise_type: string;
-    start_time: string;
-  }[]; // TODO: api 연동하며 정확한 타입 정의
+  records: RecordItem[];
 }
-
 export default function RecordList({ records }: RecordListProps) {
   const router = useRouter();
 

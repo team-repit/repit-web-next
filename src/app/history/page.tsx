@@ -54,6 +54,7 @@ export default function Page() {
             setSelectedDate(lastDate);
             router.push(`?date=${formatDateLocal(lastDate)}`);
             setActiveStartDate(lastDate);
+            handleSelectDate(lastDate);
           } else {
             // 기록 없는 경우
             setRecordedDays([]);

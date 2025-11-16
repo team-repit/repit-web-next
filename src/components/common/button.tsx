@@ -1,6 +1,6 @@
 interface ButtonProps {
   text: string;
-  variant?: "primary" | "secondary"; // TODO: variant명 명확히 변경
+  variant?: "primary" | "secondary";
   onClick?: () => void;
 }
 

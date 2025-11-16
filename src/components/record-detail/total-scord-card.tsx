@@ -14,8 +14,6 @@ export default function TotalScoreCard({
 }: TotalScoreCardProps) {
   const user = useUserStore((state) => state.user);
 
-  const numericScore = Number(recordDetail.total_score);
-
   return (
     <CardLayout>
       <div className="flex items-center justify-between w-full px-6 py-5">
@@ -26,7 +24,7 @@ export default function TotalScoreCard({
           <span className="headline-01">{user?.nickname}님의 자세 점수</span>
         </div>
         <Image
-          src={`/assets/score-${numericScore}.svg`}
+          src={`/assets/score-${recordDetail.total_score}.svg`}
           alt="분석 총 점수"
           width={80}
           height={80}
