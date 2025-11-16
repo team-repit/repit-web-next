@@ -7,6 +7,7 @@ interface VideoCardProps {
 }
 
 export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
+  console.log(videoUrl);
   const handleDownloadVideo = async () => {
     try {
       // S3 URL에서 영상 다운로드, 브라우저가 이 주소로 가서 파일을 다운로드 받는 것!
@@ -21,7 +22,7 @@ export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
       link.href = blobUrl;
 
       // 파일명 추출 (URL에서) 또는 기본 파일명 사용
-      const fileName = videoUrl.split("/").pop() || "video.mp4";
+      const fileName = videoUrl.split("/").pop()?.split("?")[0] || "video.mp4";
       link.download = fileName;
 
       // 다운로드 트리거
@@ -61,11 +62,13 @@ export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
       </div>
       <div className="border-t border-gray-300" />
       <div className="p-4">
-        <video
-          className="w-full h-120 rounded-[15px]"
-          src={videoUrl}
-          controls
-        />
+        {videoUrl && (
+          <video
+            className="w-full h-120 rounded-[15px]"
+            src={videoUrl}
+            controls
+          />
+        )}
       </div>
     </CardLayout>
   );
