@@ -28,6 +28,10 @@ export default function Page() {
     try {
       const response = await deleteRecordVideo(Number(record_id));
       console.log(response);
+      if (response.is_success) {
+        setVideoUrlForStream("");
+        setVideoUrlForDownload("");
+      }
       setIsModalOpen(false);
     } catch (error) {
       console.error("영상 삭제 중 오류 발생:", error);

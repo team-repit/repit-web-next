@@ -15,6 +15,11 @@ export default function VideoCard({
   console.log("다운로드용 url", videoUrlForDownload);
 
   const handleDownloadVideo = async () => {
+    if (!videoUrlForDownload) {
+      alert("다운로드 받을 수 없습니다.");
+      return;
+    }
+
     try {
       // CORS 회피: fetch/Blob 대신 presigned URL로 직접 이동
       const link = document.createElement("a");
