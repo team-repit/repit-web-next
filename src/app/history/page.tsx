@@ -49,11 +49,12 @@ function HistoryContent() {
             setRecordedDays(response.result);
 
             const lastDay = Math.max(...response.result);
-            const lastDate = new Date(year, today.getMonth(), lastDay);
+            const lastDate = new Date(year, month - 1, lastDay);
 
             setSelectedDate(lastDate);
             router.push(`?date=${formatDateLocal(lastDate)}`);
-            setActiveStartDate(lastDate);
+
+            // setActiveStartDate(lastDate);
             handleSelectDate(lastDate);
           } else {
             // 기록 없는 경우
