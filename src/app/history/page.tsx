@@ -37,8 +37,8 @@ function HistoryContent() {
   useEffect(() => {
     async function fetchMonthlyRecords() {
       try {
-        const year = today.getFullYear();
-        const month = today.getMonth() + 1; // getMonth()는 0부터 시작하니까 +1 필요
+        const year = activeStartDate.getFullYear();
+        const month = activeStartDate.getMonth() + 1;
 
         const response = await getMonthlyRecords({ year, month });
 
