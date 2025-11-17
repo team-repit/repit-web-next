@@ -74,8 +74,8 @@ function HistoryContent() {
       setSelectedDate(date);
       router.push(`?date=${formatDateLocal(date)}`);
 
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
+      const year = activeStartDate.getFullYear();
+      const month = activeStartDate.getMonth() + 1;
       const day = date.getDate();
 
       const response = await getDailyRecords({ year, month, day });
@@ -117,7 +117,12 @@ function HistoryContent() {
       <YearMonthDropdown
         activeStartDate={activeStartDate}
         availableMonths={availableMonths} // 조회 가능한 년, 월 전달
-        onChange={(date) => setActiveStartDate(date)}
+        onChange={(date) => {
+          setActiveStartDate(date);
+          setSelectedDate(null);
+          setDailyRecords([]);
+          router.push("");
+        }}
       />
 
       {/* 캘린더 */}
