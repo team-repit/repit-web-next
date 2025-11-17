@@ -67,7 +67,7 @@ function HistoryContent() {
     }
 
     fetchMonthlyRecords();
-  }, []);
+  }, [activeStartDate]);
 
   const handleSelectDate = async (date: Date) => {
     try {
