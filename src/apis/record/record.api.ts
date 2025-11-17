@@ -28,3 +28,12 @@ export async function getVideoS3Url(recordId: number) {
     }
   );
 }
+// 운동 영상 s3 url 스트리밍 api
+export async function getVideoS3Stream(recordId: number) {
+  return apiFetch<GetVideoS3UrlResponse>(
+    `/api/record/${recordId}/video/stream-url`,
+    {
+      method: "GET",
+    }
+  );
+}

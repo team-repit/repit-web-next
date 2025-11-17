@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import {
   deleteRecordVideo,
   getRecordDetail,
+  getVideoS3Stream,
   getVideoS3Url,
 } from "@/apis/record/record.api";
 import ConfirmModal from "@/components/common/confirm-modal";
@@ -20,7 +21,8 @@ export default function Page() {
 
   const [recordDetail, setRecordDetail] = useState<RecordDetail | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [videoUrl, setVideoUrl] = useState<string>("");
+  const [videoUrlForStream, setVideoUrlForStream] = useState<string>("");
+  const [videoUrlForDownload, setVideoUrlForDownload] = useState<string>("");
 
   const handleConfirmDelete = async () => {
     try {
@@ -43,19 +45,28 @@ export default function Page() {
       }
     };
 
-    const fetchVideoUrl = async () => {
+    const fetchVideoStreamUrl = async () => {
       try {
-        const response = await getVideoS3Url(Number(record_id));
-        console.log("Video URL:", response);
-        setVideoUrl(response.result?.url || "");
+        const response = await getVideoS3Stream(Number(record_id));
+        console.log("스트리밍용 Video URL:", response);
+        setVideoUrlForStream(response.result?.url || "");
       } catch (error) {
         console.error("영상 URL 불러오기 실패:", error);
+      }
+    };
+    const fetchVideoDownloadUrl = async () => {
+      try {
+        const response = await getVideoS3Url(Number(record_id));
+        setVideoUrlForDownload(response.result?.url || "");
+      } catch (error) {
+        console.error("다운로드용 URL 불러오기 실패:", error);
       }
     };
 
     if (record_id) {
       fetchRecordDetail();
-      fetchVideoUrl();
+      fetchVideoStreamUrl();
+      fetchVideoDownloadUrl();
     }
   }, [record_id]);
 
@@ -78,7 +89,8 @@ export default function Page() {
           recordDetail={recordDetail}
         />
         <VideoCard
-          videoUrl={videoUrl}
+          videoUrlForStream={videoUrlForStream}
+          videoUrlForDownload={videoUrlForDownload}
           onDeleteClick={() => setIsModalOpen(true)}
         />
         <AnalysisCard recordDetail={recordDetail} />

@@ -2,35 +2,28 @@ import Image from "next/image";
 import CardLayout from "./card-layout";
 
 interface VideoCardProps {
-  videoUrl: string;
+  videoUrlForStream: string;
+  videoUrlForDownload: string;
   onDeleteClick: () => void;
 }
 
-export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
-  console.log(videoUrl);
+export default function VideoCard({
+  videoUrlForStream,
+  videoUrlForDownload,
+  onDeleteClick,
+}: VideoCardProps) {
+  console.log("다운로드용 url", videoUrlForDownload);
+
   const handleDownloadVideo = async () => {
     try {
-      // S3 URL에서 영상 다운로드, 브라우저가 이 주소로 가서 파일을 다운로드 받는 것!
-      const response = await fetch(videoUrl);
-      const blob = await response.blob();
-
-      // Blob URL 생성
-      const blobUrl = window.URL.createObjectURL(blob);
-
-      // 임시 다운로드 링크 생성
+      // CORS 회피: fetch/Blob 대신 presigned URL로 직접 이동
       const link = document.createElement("a");
-      link.href = blobUrl;
-
-      // 파일명 추출 (URL에서) 또는 기본 파일명 사용
-      const fileName = videoUrl.split("/").pop()?.split("?")[0] || "video.mp4";
-      link.download = fileName;
-
-      // 다운로드 트리거
+      link.href = videoUrlForDownload;
+      link.rel = "noopener";
+      // 서버가 Content-Disposition=attachment 를 포함하므로 바로 저장됨
       document.body.appendChild(link);
       link.click();
-
       document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("다운로드 실패:", error);
       alert("영상 다운로드에 실패했습니다.");
@@ -62,10 +55,10 @@ export default function VideoCard({ videoUrl, onDeleteClick }: VideoCardProps) {
       </div>
       <div className="border-t border-gray-300" />
       <div className="p-4">
-        {videoUrl && (
+        {videoUrlForStream && (
           <video
             className="w-full h-120 rounded-[15px]"
-            src={videoUrl}
+            src={videoUrlForStream}
             controls
           />
         )}
