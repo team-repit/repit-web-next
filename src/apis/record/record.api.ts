@@ -14,7 +14,7 @@ export async function getRecordDetail(recordId: number) {
 
 // 운동 영상 삭제 api
 export async function deleteRecordVideo(recordId: number) {
-  return apiFetch<DeleteRecordVideoResponse>(`/api/record/${recordId}`, {
+  return apiFetch<DeleteRecordVideoResponse>(`/api/record/${recordId}/video`, {
     method: "DELETE",
   });
 }
