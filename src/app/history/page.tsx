@@ -94,7 +94,9 @@ function HistoryContent() {
 
   const getAvailableMonths = () => {
     const result: { year: number; month: number }[] = [];
-    let current = new Date(joinDate);
+    const [y, m, d] = joinDate.split("-").map(Number);
+    let current = new Date(y, m - 1, d);
+
     while (current <= today) {
       result.push({
         year: current.getFullYear(),
