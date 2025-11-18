@@ -24,8 +24,8 @@ function HistoryContent() {
     initialDateParam ? new Date(initialDateParam + "T00:00:00") : null
   );
 
-  const joinDate = new Date(2024, 5, 1); // 가입 날짜 (예시임)
   const today = new Date();
+  const [joinDate, setJoinDate] = useState("");
 
   const [activeStartDate, setActiveStartDate] = useState<Date>(
     initialDateParam ? new Date(initialDateParam + "T00:00:00") : today
@@ -44,11 +44,11 @@ function HistoryContent() {
 
         console.log(response);
         if (response.is_success) {
-          if (response.result && response.result.length > 0) {
+          if (response.result && response.result.days.length > 0) {
             // 기록 있는 경우
-            setRecordedDays(response.result);
-
-            const lastDay = Math.max(...response.result);
+            setRecordedDays(response.result.days);
+            setJoinDate(response.result.member_created_at);
+            const lastDay = Math.max(...response.result.days);
             const lastDate = new Date(year, month - 1, lastDay);
 
             setSelectedDate(lastDate);

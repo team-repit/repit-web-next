@@ -1,7 +1,10 @@
 import { ApiResponse } from "../common-type";
 
 // 월별 운동 기록 result
-export type MonthlyRecords = number[];
+export interface MonthlyRecords {
+  days: number[];
+  member_created_at: string;
+}
 
 // 월별 운동 기록 조회 요청
 export interface GetMonthlyRecordsRequest {
