@@ -34,6 +34,8 @@ function HistoryContent() {
   const [recordedDays, setRecordedDays] = useState<number[]>([]); // 해당 월의 운동 기록이 있는 날짜들
   const [dailyRecords, setDailyRecords] = useState<RecordItem[]>([]); // 일별 운동 기록들
 
+  const [isInit, setIsInit] = useState(true);
+
   useEffect(() => {
     async function fetchMonthlyRecords() {
       try {
@@ -48,16 +50,18 @@ function HistoryContent() {
             // 기록 있는 경우
             setRecordedDays(response.result.days);
             setJoinDate(response.result.member_created_at);
-            const lastDay = Math.max(...response.result.days);
-            const lastDate = new Date(year, month - 1, lastDay);
 
-            setSelectedDate(lastDate);
-            router.push(`?date=${formatDateLocal(lastDate)}`);
+            if (isInit) {
+              const lastDay = Math.max(...response.result.days);
+              const lastDate = new Date(year, month - 1, lastDay);
 
-            // setActiveStartDate(lastDate);
-            handleSelectDate(lastDate);
+              setSelectedDate(lastDate);
+              router.push(`?date=${formatDateLocal(lastDate)}`);
+              handleSelectDate(lastDate);
+
+              setIsInit(false); // 다음부터는 자동 선택 안 함
+            }
           } else {
-            // 기록 없는 경우
             setRecordedDays([]);
             setSelectedDate(null);
           }
